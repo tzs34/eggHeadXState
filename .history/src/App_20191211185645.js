@@ -7,7 +7,7 @@ import { fetchMachine } from './machines/fetch';
 function App() {
   const [fetchPeopleState, sendToPeopleMachine] = useMachine(fetchMachine, {
     services: {
-      fetchData: () => fetch('https://swapi.co/api/people/')
+      fetchData: () => fetch(url)
       .then(response => response.json())
       .then(people => people)
       
@@ -16,7 +16,7 @@ function App() {
       // return r.results})
     }
   });
- console.log(fetchPeopleState)
+ 
 
   return (
     <div className="App">
@@ -24,22 +24,17 @@ function App() {
         Fetch
       </button>
       {fetchPeopleState.matches('pending') ? <p>Loading</p> : null}
-      {fetchPeopleState.matches('successful.withData') &&
+      {fetchPeopleState.matches('successful') ? (
         <ul>
           {fetchPeopleState.context.results &&
-            fetchPeopleState.context.results.results.map((person, index) => (
+            fetchPeopleState.context.results.map((person, index) => (
               <li key={index}>{person.name}</li>
             ))}
         </ul>
-      }
-      {
-        fetchPeopleState.matches('withoutData') &&
-        <div> No Data</div>
-      }
-      {
-        fetchPeopleState.matches('failed') &&
+      ) : null}
+      {fetchPeopleState.matches('failed') ? (
         <p>{fetchPeopleState.context.message}</p>
-      }
+      ) : null}
     </div>
   );
 }

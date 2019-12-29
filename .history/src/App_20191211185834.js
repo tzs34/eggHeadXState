@@ -24,22 +24,17 @@ function App() {
         Fetch
       </button>
       {fetchPeopleState.matches('pending') ? <p>Loading</p> : null}
-      {fetchPeopleState.matches('successful.withData') &&
+      {fetchPeopleState.matches('successful') ? (
         <ul>
           {fetchPeopleState.context.results &&
             fetchPeopleState.context.results.results.map((person, index) => (
               <li key={index}>{person.name}</li>
             ))}
         </ul>
-      }
-      {
-        fetchPeopleState.matches('withoutData') &&
-        <div> No Data</div>
-      }
-      {
-        fetchPeopleState.matches('failed') &&
+      ) : null}
+      {fetchPeopleState.matches('failed') ? (
         <p>{fetchPeopleState.context.message}</p>
-      }
+      ) : null}
     </div>
   );
 }
